@@ -1,0 +1,798 @@
+/* ============================================================
+       CSS変数 / テーマ定義
+    ============================================================ */
+    :root {
+      --transition-speed: 0.45s;
+      --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ---- 1. Energetic ---- */
+    body[data-theme="energetic"] {
+      --bg-gradient: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+      --bg-color: #fff7ed;
+      --card-bg: #ffffff;
+      --text-main: #7c2d12;
+      --text-sub: #c2410c;
+      --accent: #f97316;
+      --accent-2: #fbbf24;
+      --accent-hover: #ea580c;
+      --border-color: #fed7aa;
+      --checkbox-done: #f97316;
+      --font-family: 'Trebuchet MS', 'Arial Black', 'Impact', sans-serif;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --shadow: 0 6px 20px rgba(249, 115, 22, 0.18);
+      --shadow-hover: 0 12px 32px rgba(249, 115, 22, 0.28);
+      --progress-bg: #ffedd5;
+      --badge-bg: #fff7ed;
+      --toast-bg: #7c2d12;
+      --toast-color: #fff;
+      --btn-text: #fff;
+      --input-focus: rgba(249, 115, 22, 0.15);
+      --active-ring: rgba(249, 115, 22, 0.4);
+      --done-strike: #f97316;
+    }
+
+    /* ---- 2. Relax ---- */
+    body[data-theme="relax"] {
+      --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      --bg-color: #f0fdf4;
+      --card-bg: #ffffff;
+      --text-main: #14532d;
+      --text-sub: #16a34a;
+      --accent: #22c55e;
+      --accent-2: #86efac;
+      --accent-hover: #15803d;
+      --border-color: #bbf7d0;
+      --checkbox-done: #22c55e;
+      --font-family: 'Georgia', 'Palatino Linotype', serif;
+      --radius: 24px;
+      --radius-sm: 16px;
+      --shadow: 0 8px 24px rgba(34, 197, 94, 0.10);
+      --shadow-hover: 0 14px 36px rgba(34, 197, 94, 0.20);
+      --progress-bg: #dcfce7;
+      --badge-bg: #f0fdf4;
+      --toast-bg: #14532d;
+      --toast-color: #fff;
+      --btn-text: #fff;
+      --input-focus: rgba(34, 197, 94, 0.12);
+      --active-ring: rgba(34, 197, 94, 0.4);
+      --done-strike: #22c55e;
+    }
+
+    /* ---- 3. Deep Focus ---- */
+    body[data-theme="focus"] {
+      --bg-gradient: linear-gradient(135deg, #060d1b 0%, #0b1221 100%);
+      --bg-color: #060d1b;
+      --card-bg: #0f1729;
+      --text-main: #e2e8f0;
+      --text-sub: #64748b;
+      --accent: #06b6d4;
+      --accent-2: #22d3ee;
+      --accent-hover: #0891b2;
+      --border-color: #1e293b;
+      --checkbox-done: #06b6d4;
+      --font-family: 'Courier New', 'Lucida Console', monospace;
+      --radius: 5px;
+      --radius-sm: 3px;
+      --shadow: 0 4px 20px rgba(6, 182, 212, 0.12);
+      --shadow-hover: 0 8px 40px rgba(6, 182, 212, 0.25);
+      --progress-bg: #1e293b;
+      --badge-bg: #0f172a;
+      --toast-bg: #06b6d4;
+      --toast-color: #060d1b;
+      --btn-text: #060d1b;
+      --input-focus: rgba(6, 182, 212, 0.10);
+      --active-ring: rgba(6, 182, 212, 0.4);
+      --done-strike: #475569;
+    }
+
+    /* ---- 4. Cozy ---- */
+    body[data-theme="cozy"] {
+      --bg-gradient: linear-gradient(135deg, #fbf7f4 0%, #fdf8f6 100%);
+      --bg-color: #fbf7f4;
+      --card-bg: #fffcfa;
+      --text-main: #3e2723;
+      --text-sub: #8d6e63;
+      --accent: #a1887f;
+      --accent-2: #d7ccc8;
+      --accent-hover: #6d4c41;
+      --border-color: #e8d5cc;
+      --checkbox-done: #a1887f;
+      --font-family: 'Palatino Linotype', 'Book Antiqua', 'Georgia', serif;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 4px 16px rgba(93, 64, 55, 0.10);
+      --shadow-hover: 0 10px 28px rgba(93, 64, 55, 0.16);
+      --progress-bg: #efebe9;
+      --badge-bg: #f5f0ed;
+      --toast-bg: #5d4037;
+      --toast-color: #fff;
+      --btn-text: #fff;
+      --input-focus: rgba(161, 136, 127, 0.12);
+      --active-ring: rgba(161, 136, 127, 0.4);
+      --done-strike: #bcaaa4;
+    }
+
+    /* ---- 5. Gentle ---- */
+    body[data-theme="gentle"] {
+      --bg-gradient: linear-gradient(135deg, #fdf2f8 0%, #f5f3ff 100%);
+      --bg-color: #fdf2f8;
+      --card-bg: #ffffff;
+      --text-main: #701a75;
+      --text-sub: #a855f7;
+      --accent: #e879f9;
+      --accent-2: #f0abfc;
+      --accent-hover: #d946ef;
+      --border-color: #f5d0fe;
+      --checkbox-done: #e879f9;
+      --font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
+      --radius: 22px;
+      --radius-sm: 14px;
+      --shadow: 0 8px 28px rgba(232, 121, 249, 0.14);
+      --shadow-hover: 0 16px 40px rgba(232, 121, 249, 0.24);
+      --progress-bg: #fce7f3;
+      --badge-bg: #fdf2f8;
+      --toast-bg: #701a75;
+      --toast-color: #fff;
+      --btn-text: #fff;
+      --input-focus: rgba(232, 121, 249, 0.12);
+      --active-ring: rgba(232, 121, 249, 0.4);
+      --done-strike: #e879f9;
+    }
+
+    /* ============================================================
+       リセット & ベース
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-family);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 36px 16px 80px;
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        color var(--transition-speed) var(--transition-ease);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 540px;
+    }
+
+    /* ============================================================
+       気分セレクター
+    ============================================================ */
+    .mood-selector {
+      background: var(--card-bg);
+      padding: 10px 6px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-around;
+      border: 1.5px solid var(--border-color);
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        border-color var(--transition-speed) var(--transition-ease),
+        box-shadow var(--transition-speed) var(--transition-ease),
+        border-radius var(--transition-speed) var(--transition-ease);
+    }
+
+    .mood-btn {
+      background: none;
+      border: 2px solid transparent;
+      font-size: 22px;
+      padding: 8px 10px;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-sub);
+      font-family: inherit;
+      transition:
+        transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background-color 0.25s,
+        border-color 0.25s,
+        color 0.25s;
+      position: relative;
+    }
+
+    .mood-btn .mood-label {
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      transition: color 0.25s;
+    }
+
+    .mood-btn:hover {
+      transform: translateY(-3px) scale(1.06);
+      background: var(--badge-bg);
+    }
+
+    .mood-btn.active {
+      background: var(--badge-bg);
+      color: var(--accent);
+      border-color: var(--accent);
+      transform: translateY(-2px) scale(1.08);
+      box-shadow: 0 0 0 4px var(--active-ring);
+    }
+
+    .mood-btn.active .mood-label {
+      color: var(--accent);
+    }
+
+    /* ============================================================
+       ヘッダー
+    ============================================================ */
+    header {
+      margin-bottom: 24px;
+      padding: 0 2px;
+    }
+
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .date-badge {
+      display: inline-block;
+      background: var(--badge-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 30px;
+      letter-spacing: 0.08em;
+      font-weight: bold;
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        border-color var(--transition-speed) var(--transition-ease),
+        color var(--transition-speed) var(--transition-ease);
+    }
+
+    .mood-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent);
+      color: var(--btn-text);
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 30px;
+      font-weight: bold;
+      letter-spacing: 0.04em;
+      transition:
+        background var(--transition-speed) var(--transition-ease);
+    }
+
+    .app-title {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      transition: color var(--transition-speed) var(--transition-ease);
+    }
+
+    .mood-quote {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-top: 6px;
+      font-style: italic;
+      line-height: 1.6;
+      transition: color var(--transition-speed) var(--transition-ease);
+    }
+
+    /* ============================================================
+       進捗バー
+    ============================================================ */
+    .progress-wrap {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        border-color var(--transition-speed) var(--transition-ease),
+        box-shadow var(--transition-speed) var(--transition-ease),
+        border-radius var(--transition-speed) var(--transition-ease);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
+      font-size: 12px;
+      color: var(--text-sub);
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .progress-count {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--accent);
+    }
+
+    .progress-track {
+      background: var(--progress-bg);
+      border-radius: 30px;
+      height: 8px;
+      overflow: hidden;
+      transition: background var(--transition-speed) var(--transition-ease);
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 30px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      transition:
+        width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        background var(--transition-speed) var(--transition-ease);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -60%;
+      width: 60%;
+      height: 100%;
+      background: rgba(255,255,255,0.35);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { left: -60%; }
+      100% { left: 110%; }
+    }
+
+    /* ============================================================
+       フィルタータブ
+    ============================================================ */
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      color: var(--text-sub);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      transition:
+        background 0.22s,
+        border-color 0.22s,
+        color 0.22s,
+        box-shadow 0.22s,
+        transform 0.15s;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--btn-text);
+      box-shadow: 0 4px 12px var(--active-ring);
+    }
+
+    /* ============================================================
+       入力フォーム
+    ============================================================ */
+    .input-box {
+      display: flex;
+      gap: 8px;
+      background: var(--card-bg);
+      padding: 8px 8px 8px 18px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--border-color);
+      margin-bottom: 20px;
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        border-color var(--transition-speed) var(--transition-ease),
+        box-shadow var(--transition-speed) var(--transition-ease),
+        border-radius var(--transition-speed) var(--transition-ease);
+    }
+
+    .input-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-hover), 0 0 0 3px var(--input-focus);
+    }
+
+    .input-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text-main);
+      transition: color var(--transition-speed) var(--transition-ease);
+    }
+
+    .input-box input::placeholder {
+      color: var(--text-sub);
+      opacity: 0.55;
+      transition: color var(--transition-speed) var(--transition-ease);
+    }
+
+    .add-btn {
+      background: var(--accent);
+      color: var(--btn-text);
+      border: none;
+      padding: 10px 20px;
+      border-radius: calc(var(--radius) - 4px);
+      cursor: pointer;
+      font-weight: bold;
+      font-family: inherit;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      transition:
+        background 0.2s,
+        transform 0.15s,
+        box-shadow 0.2s;
+    }
+
+    .add-btn:hover {
+      background: var(--accent-hover);
+      transform: scale(1.04);
+    }
+
+    .add-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Energetic専用のパルス */
+    body[data-theme="energetic"] .add-btn {
+      animation: pulse-btn 2s infinite;
+    }
+
+    @keyframes pulse-btn {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+      50%       { box-shadow: 0 0 0 8px rgba(249, 115, 22, 0); }
+    }
+
+    /* ============================================================
+       タスクリスト
+    ============================================================ */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-sub);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    /* ============================================================
+       タスクアイテム
+    ============================================================ */
+    .task-item {
+      display: flex;
+      align-items: center;
+      background: var(--card-bg);
+      padding: 14px 16px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--border-color);
+      animation: slideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        border-color var(--transition-speed) var(--transition-ease),
+        box-shadow var(--transition-speed) var(--transition-ease),
+        border-radius var(--transition-speed) var(--transition-ease),
+        opacity 0.3s,
+        transform 0.3s;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .task-item:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .task-item.completed {
+      opacity: 0.55;
+    }
+
+    .task-item.removing {
+      animation: slideOut 0.28s ease-in both;
+    }
+
+    @keyframes slideOut {
+      to {
+        opacity: 0;
+        transform: translateX(20px) scale(0.95);
+      }
+    }
+
+    /* カスタムチェックボックス */
+    .task-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      min-width: 22px;
+      border: 2px solid var(--accent);
+      border-radius: calc(var(--radius-sm) / 2);
+      margin-right: 14px;
+      cursor: pointer;
+      display: grid;
+      place-content: center;
+      transition:
+        background 0.2s,
+        border-color 0.2s,
+        box-shadow 0.2s,
+        transform 0.15s;
+      position: relative;
+    }
+
+    .task-checkbox::before {
+      content: "✓";
+      color: #fff;
+      font-size: 13px;
+      font-weight: bold;
+      transform: scale(0) rotate(-15deg);
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+      line-height: 1;
+    }
+
+    .task-checkbox:checked {
+      background: var(--checkbox-done);
+      border-color: var(--checkbox-done);
+      transform: scale(1.1);
+    }
+
+    .task-checkbox:checked::before {
+      transform: scale(1) rotate(0deg);
+    }
+
+    .task-checkbox:hover:not(:checked) {
+      box-shadow: 0 0 0 4px var(--input-focus);
+    }
+
+    /* タスクテキスト */
+    .task-text {
+      flex: 1;
+      font-size: 15px;
+      word-break: break-all;
+      line-height: 1.5;
+      transition:
+        color var(--transition-speed) var(--transition-ease),
+        text-decoration-color 0.3s;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      text-decoration-color: var(--done-strike);
+      color: var(--text-sub);
+    }
+
+    /* 削除ボタン */
+    .delete-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      opacity: 0;
+      transition:
+        opacity 0.2s,
+        background 0.2s,
+        color 0.2s,
+        transform 0.15s;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    .task-item:hover .delete-btn {
+      opacity: 1;
+    }
+
+    .delete-btn:hover {
+      background: var(--progress-bg);
+      color: var(--text-main);
+      transform: scale(1.15);
+    }
+
+    /* ============================================================
+       フッター（タスク全削除）
+    ============================================================ */
+    .list-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    .clear-btn {
+      background: none;
+      border: 1.5px solid var(--border-color);
+      color: var(--text-sub);
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-family: inherit;
+      transition:
+        border-color 0.2s,
+        color 0.2s,
+        background 0.2s;
+    }
+
+    .clear-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--input-focus);
+    }
+
+    /* ============================================================
+       トースト通知
+    ============================================================ */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: var(--toast-bg);
+      color: var(--toast-color);
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: inherit;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1000;
+      white-space: nowrap;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.22);
+      transition:
+        background var(--transition-speed) var(--transition-ease),
+        color var(--transition-speed) var(--transition-ease),
+        transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+        opacity 0.35s ease;
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ============================================================
+       テーマ切替トランジション（ボディ全体）
+    ============================================================ */
+    body,
+    .mood-selector,
+    .input-box,
+    .task-item,
+    .progress-wrap,
+    .filter-btn,
+    .date-badge,
+    .mood-badge,
+    .app-title,
+    .mood-quote,
+    .task-checkbox,
+    .progress-bar,
+    .progress-track,
+    .clear-btn {
+      transition-property: background, background-color, border-color, color, box-shadow, border-radius, opacity;
+      transition-duration: var(--transition-speed);
+      transition-timing-function: var(--transition-ease);
+    }
+
+    /* Deep Focusテーマ専用演出 */
+    body[data-theme="focus"] .task-text {
+      letter-spacing: 0.03em;
+    }
+
+    body[data-theme="focus"] .app-title {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 22px;
+    }
+
+    body[data-theme="focus"] .mood-quote {
+      font-style: normal;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    /* Cozyテーマ専用演出 */
+    body[data-theme="cozy"] .app-title {
+      font-style: italic;
+    }
+
+    /* Gentleテーマ専用演出 */
+    body[data-theme="gentle"] .task-item {
+      box-shadow: var(--shadow), inset 0 0 0 1px rgba(232, 121, 249, 0.08);
+    }
+
+    /* ============================================================
+       スクロールバー（テーマ対応）
+    ============================================================ */
+::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-color);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* ============================================================
+       レスポンシブ
+    ============================================================ */
+    @media (max-width: 480px) {
+      body { padding: 20px 12px; }
+      .mood-btn span { display: none; }
+      .mood-btn { font-size: 22px; padding: 8px; }
+      .app-title { font-size: 20px; }
+    }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodDo - 今日の気分に寄り添うTodo</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="relax">
+
+  <div class="container">
+    <!-- 気分選択バー -->
+    <div class="mood-selector">
+      <button class="mood-btn" data-mood="energetic" title="Energetic">⚡<span>活発</span></button>
+      <button class="mood-btn active" data-mood="relax" title="Relax">🌿<span>のんびり</span></button>
+      <button class="mood-btn" data-mood="focus" title="Deep Focus">🌌<span>集中</span></button>
+      <button class="mood-btn" data-mood="cozy" title="Cozy Cafe">☕<span>カフェ</span></button>
+      <button class="mood-btn" data-mood="gentle" title="Gentle">🌸<span>癒やし</span></button>
+    </div>
+
+    <!-- ヘッダー -->
+    <header>
+      <div class="date-badge" id="currentDate">2025.01.01 WED</div>
+      <h1 class="app-title" id="moodTitle">心穏やかにいこう🌿</h1>
+      <p class="mood-quote" id="moodQuote">「焦らず、深呼吸してマイペースに進めよう。」</p>
+    </header>
+
+    <!-- プログレスバー -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-label">
+        <span id="progressText">0 / 0 完了</span>
+        <span id="progressPercent">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- 入力エリア -->
+    <form class="input-box" id="todoForm">
+      <input type="text" id="taskInput" placeholder="今日やりたいことを入れてね…" autocomplete="off">
+      <button type="submit" class="add-btn" id="addBtn">追加</button>
+    </form>
+
+    <!-- フィルター -->
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">すべて</button>
+      <button class="filter-btn" data-filter="active">未完了</button>
+      <button class="filter-btn" data-filter="done">完了済み</button>
+    </div>
+
+    <!-- タスク一覧 -->
+    <div class="task-list" id="taskList"></div>
+
+    <!-- フッター -->
+    <div class="list-footer" id="listFooter" style="display:none;">
+      <button class="clear-btn" id="clearDoneBtn">完了済みを削除</button>
+    </div>
+  </div>
+
+  <!-- 応援トースト -->
+  <div id="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
