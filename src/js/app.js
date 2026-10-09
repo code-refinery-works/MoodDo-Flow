@@ -1,310 +1,383 @@
 /* ============================================================
-       定数・テーマデータ
-    ============================================================ */
-    const MOOD_DATA = {
-      energetic: {
-        title: "爆速で片付けよう！🔥",
-        quote: "エネルギー満点。一番やりたいことから始めよう！",
-        placeholder: "どんどんぶち込もう…！",
-        addLabel: "GO!",
-        praise: [
-          "最高！その調子で突き進もう🔥",
-          "ナイスクリア！まだまだいける⚡",
-          "圧倒的スピード！🚀",
-          "完璧にこなした！次はどれだ？🎯"
-        ]
-      },
-      relax: {
-        title: "心穏やかにいこう🌿",
-        quote: "焦らず、深呼吸してマイペースに進めよう。",
-        placeholder: "今日やりたいことを入れてね…",
-        addLabel: "追加",
-        praise: [
-          "一歩ずつ、無理せず進めて偉いね🌱",
-          "のんびりクリア！自分を褒めよう🍃",
-          "ゆっくりでも前進！十分だよ🌿",
-          "一歩前進、えらいね☀️"
-        ]
-      },
-      focus: {
-        title: "DEEP FOCUS // ZONE 🌌",
-        quote: "余計な雑音を遮断。目の前の1点に集中する。",
-        placeholder: "TASK INPUT...",
-        addLabel: "ADD",
-        praise: [
-          "TASK DONE. 集中力持続中 ✨",
-          "COMPLETED. 次のターゲットへ 🎯",
-          "CLEAR. 順調。続行せよ。💻",
-          "Focus Clear. 次のタスクへ移行。⚡"
-        ]
-      },
-      cozy: {
-        title: "あたたかい時間と共に☕",
-        quote: "お気に入りのドリンクを淹れて、少しずつ。",
-        placeholder: "今日やること、ぽつぽつと…",
-        addLabel: "追加",
-        praise: [
-          "お疲れさま。ひと息入れよう☕",
-          "ほっと一息、よくできました🍪",
-          "いいペースだよ、無理しないでね📖",
-          "ゆっくりできたね。素敵だよ🕯️"
-        ]
-      },
-      gentle: {
-        title: "自分をやさしく褒める日🌸",
-        quote: "小さなことでも、できた自分を認めてあげよう。",
-        placeholder: "今日の小さな一歩を書いてね…",
-        addLabel: "追加 🌸",
-        praise: [
-          "できた自分をたくさん褒めてあげて🌸",
-          "素敵！自分に花丸をあげよう💮",
-          "えらい！本当に頑張ってるよ🌸",
-          "クリアできたね、誇らしいよ🕊️"
-        ]
-      }
-    };
+     STATE
+  ============================================================ */
+  const MOODS = {
+    energetic: {
+      name: 'やる気MAX',
+      emoji: '🔥',
+      cheer: 'この調子で全部片付けよう！ロケットスタート！🚀',
+      themeClass: 'theme-energetic',
+      completeFx: 'confetti',
+    },
+    chill: {
+      name: 'まったり・省エネ',
+      emoji: '🌿',
+      cheer: 'マイペースで大丈夫。ひとつできたら花丸だよ。☕',
+      themeClass: 'theme-chill',
+      completeFx: 'steam',
+    },
+    focus: {
+      name: '集中モード',
+      emoji: '🎯',
+      cheer: 'ノイズを遮断。目の前の1つに没入しよう。⚡',
+      themeClass: 'theme-focus',
+      completeFx: 'glow',
+    },
+    cozy: {
+      name: 'もやもや・リセット',
+      emoji: '🌸',
+      cheer: 'まずは深呼吸。小さいことから整理しよう。🫧',
+      themeClass: 'theme-cozy',
+      completeFx: 'ripple',
+    },
+  };
 
-    /* ============================================================
-       状態管理
-    ============================================================ */
-    let currentMood   = localStorage.getItem('mooddo_theme') || 'relax';
-    let currentFilter = 'all';
-    let tasks = [];
+  let currentMood = 'energetic';
+  let tasks = JSON.parse(localStorage.getItem('mooddo_tasks') || '[]');
+  let moodLog = JSON.parse(localStorage.getItem('mooddo_log') || '[]');
+  let nextId = parseInt(localStorage.getItem('mooddo_nextid') || '1', 10);
 
-    try {
-      tasks = JSON.parse(localStorage.getItem('mooddo_tasks')) || [];
-    } catch(e) {
-      tasks = [];
-    }
+  // Timer state
+  let timerInterval = null;
+  let timerSeconds = 25 * 60;
+  let timerRunning = false;
+
+  /* ============================================================
+     PERSIST
+  ============================================================ */
+  function saveTasks() {
+    localStorage.setItem('mooddo_tasks', JSON.stringify(tasks));
+    localStorage.setItem('mooddo_nextid', String(nextId));
+  }
+
+  function saveLog() {
+    localStorage.setItem('mooddo_log', JSON.stringify(moodLog));
+  }
+
+  /* ============================================================
+     MOOD SWITCH
+  ============================================================ */
+  function switchMood(mood) {
+    currentMood = mood;
+    const moodData = MOODS[mood];
+
+    // body theme class
+    document.body.className = moodData.themeClass;
+
+    // active button
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.mood === mood);
+    });
+
+    // today message
+    document.getElementById('today-msg').textContent = moodData.cheer;
+
+    // log the mood switch
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+    moodLog.unshift({ mood, time: timeStr, emoji: moodData.emoji, name: moodData.name });
+    if (moodLog.length > 20) moodLog = moodLog.slice(0, 20);
+    saveLog();
+    renderMoodLog();
+
+    // toast
+    showToast(`${moodData.emoji} ${moodData.name} モードに切り替えました`);
+  }
+
+  /* ============================================================
+     RENDER TASKS
+  ============================================================ */
+  function renderTasks() {
+    const list = document.getElementById('task-list');
+    const empty = document.getElementById('empty-state');
+    list.innerHTML = '';
 
     if (tasks.length === 0) {
-      tasks = [
-        { id: 1, text: "おいしいお茶を淹れる", completed: true },
-        { id: 2, text: "タスクをひとつだけ終わらせる", completed: false },
-        { id: 3, text: "今日の小さな幸せを見つける", completed: false }
-      ];
-    }
-
-    /* ============================================================
-       日付の描画
-    ============================================================ */
-    function renderDate() {
-      const now  = new Date();
-      const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-      const y  = now.getFullYear();
-      const mo = String(now.getMonth() + 1).padStart(2, '0');
-      const d  = String(now.getDate()).padStart(2, '0');
-      document.getElementById('currentDate').textContent =
-        `${y}.${mo}.${d} ${days[now.getDay()]}`;
-    }
-
-    /* ============================================================
-       テーマ切替
-    ============================================================ */
-    function setMood(moodKey) {
-      currentMood = moodKey;
-      localStorage.setItem('mooddo_theme', moodKey);
-      document.body.setAttribute('data-theme', moodKey);
-
-      document.querySelectorAll('.mood-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.mood === moodKey);
+      empty.style.display = 'block';
+    } else {
+      empty.style.display = 'none';
+      tasks.forEach(task => {
+        const li = document.createElement('li');
+        li.className = 'task-item' + (task.completed ? ' completed' : '');
+        li.dataset.id = task.id;
+        li.innerHTML = `
+          <button class="check-btn${task.completed ? ' checked' : ''}" onclick="toggleTask(${task.id})" title="完了/未完了を切り替え">
+            ${task.completed ? '✓' : ''}
+          </button>
+          <span class="task-text">${escapeHtml(task.text)}</span>
+          <button class="delete-btn" onclick="deleteTask(${task.id})" title="削除">✕</button>
+        `;
+        list.appendChild(li);
       });
-
-      const data = MOOD_DATA[moodKey];
-      document.getElementById('moodTitle').textContent   = data.title;
-      document.getElementById('moodQuote').textContent   = `「${data.quote}」`;
-      document.getElementById('taskInput').placeholder   = data.placeholder;
-      document.getElementById('addBtn').textContent      = data.addLabel;
     }
 
-    /* ============================================================
-       プログレスバーの更新
-    ============================================================ */
-    function updateProgress() {
-      const total     = tasks.length;
-      const done      = tasks.filter(t => t.completed).length;
-      const pct       = total === 0 ? 0 : Math.round((done / total) * 100);
+    updateStats();
+  }
 
-      document.getElementById('progressText').textContent   = `${done} / ${total} 完了`;
-      document.getElementById('progressPercent').textContent = `${pct}%`;
-      document.getElementById('progressBar').style.width    = `${pct}%`;
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
-      // 完了済みが1件以上あればフッター表示
-      document.getElementById('listFooter').style.display = done > 0 ? 'flex' : 'none';
-    }
+  /* ============================================================
+     STATS
+  ============================================================ */
+  function updateStats() {
+    const total = tasks.length;
+    const done = tasks.filter(t => t.completed).length;
+    const rate = total === 0 ? 0 : Math.round((done / total) * 100);
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-done').textContent = done;
+    document.getElementById('stat-rate').textContent = rate + '%';
+  }
 
-    /* ============================================================
-       トースト通知
-    ============================================================ */
-    let toastTimer = null;
-    function showToast(text) {
-      const toast = document.getElementById('toast');
-      toast.textContent = text;
-      toast.classList.add('show');
-      if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
-    }
-
-    function showPraise() {
-      const list = MOOD_DATA[currentMood].praise;
-      showToast(list[Math.floor(Math.random() * list.length)]);
-    }
-
-    /* ============================================================
-       タスク描画
-    ============================================================ */
-    function getFilteredTasks() {
-      switch (currentFilter) {
-        case 'active': return tasks.filter(t => !t.completed);
-        case 'done':   return tasks.filter(t =>  t.completed);
-        default:       return tasks;
-      }
-    }
-
-    function renderTasks() {
-      const list     = document.getElementById('taskList');
-      const filtered = getFilteredTasks();
-      list.innerHTML = '';
-
-      if (filtered.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'empty-state';
-        empty.textContent =
-          currentFilter === 'done'   ? 'まだ完了したタスクはないよ ✨' :
-          currentFilter === 'active' ? 'すべてのタスクが完了！ 🎉'      :
-                                       'タスクを追加してみよう！';
-        list.appendChild(empty);
-      } else {
-        filtered.forEach(task => {
-          const item = document.createElement('div');
-          item.className = `task-item${task.completed ? ' completed' : ''}`;
-          item.dataset.id = task.id;
-
-          const checkbox = document.createElement('input');
-          checkbox.type      = 'checkbox';
-          checkbox.className = 'task-checkbox';
-          checkbox.checked   = task.completed;
-          checkbox.addEventListener('change', () => toggleTask(task.id));
-
-          const textSpan = document.createElement('span');
-          textSpan.className   = 'task-text';
-          textSpan.textContent = task.text;
-          textSpan.contentEditable = 'true';
-          textSpan.spellcheck = false;
-          textSpan.addEventListener('blur', () => {
-            const newText = textSpan.textContent.trim();
-            if (newText) {
-              tasks = tasks.map(t => t.id === task.id ? { ...t, text: newText } : t);
-              saveTasks();
-            } else {
-              textSpan.textContent = task.text;
-            }
-          });
-          textSpan.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') { e.preventDefault(); textSpan.blur(); }
-          });
-
-          const delBtn = document.createElement('button');
-          delBtn.className = 'delete-btn';
-          delBtn.innerHTML  = '✕';
-          delBtn.title      = '削除';
-          delBtn.addEventListener('click', () => deleteTask(task.id, item));
-
-          item.appendChild(checkbox);
-          item.appendChild(textSpan);
-          item.appendChild(delBtn);
-          list.appendChild(item);
-        });
-      }
-
-      updateProgress();
-      saveTasks();
-    }
-
-    /* ============================================================
-       データ操作
-    ============================================================ */
-    function saveTasks() {
-      localStorage.setItem('mooddo_tasks', JSON.stringify(tasks));
-    }
-
-    function toggleTask(id) {
-      tasks = tasks.map(t => {
-        if (t.id === id) {
-          const next = !t.completed;
-          if (next) showPraise();
-          return { ...t, completed: next };
-        }
-        return t;
-      });
-      renderTasks();
-    }
-
-    function deleteTask(id, itemEl) {
-      itemEl.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-      itemEl.style.opacity    = '0';
-      itemEl.style.transform  = 'translateX(20px)';
-      setTimeout(() => {
-        tasks = tasks.filter(t => t.id !== id);
-        renderTasks();
-      }, 260);
-    }
-
-    /* ============================================================
-       タスク追加
-    ============================================================ */
-    document.getElementById('todoForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const input = document.getElementById('taskInput');
-      const text  = input.value.trim();
-      if (!text) return;
-
-      tasks.unshift({ id: Date.now(), text, completed: false });
-      input.value = '';
-      currentFilter = 'all';
-      document.querySelectorAll('.filter-btn').forEach(b =>
-        b.classList.toggle('active', b.dataset.filter === 'all')
-      );
-      renderTasks();
-
-      // 追加ボタンのプチアニメ
-      const btn = document.getElementById('addBtn');
-      btn.style.transform = 'scale(0.92)';
-      setTimeout(() => btn.style.transform = '', 150);
-    });
-
-    /* ============================================================
-       フィルター
-    ============================================================ */
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentFilter = btn.dataset.filter;
-        document.querySelectorAll('.filter-btn').forEach(b =>
-          b.classList.toggle('active', b === btn)
-        );
-        renderTasks();
-      });
-    });
-
-    /* ============================================================
-       完了済み一括削除
-    ============================================================ */
-    document.getElementById('clearDoneBtn').addEventListener('click', () => {
-      tasks = tasks.filter(t => !t.completed);
-      renderTasks();
-      showToast('完了済みタスクを削除しました 🗑️');
-    });
-
-    /* ============================================================
-       気分ボタン
-    ============================================================ */
-    document.querySelectorAll('.mood-btn').forEach(btn => {
-      btn.addEventListener('click', () => setMood(btn.dataset.mood));
-    });
-
-    /* ============================================================
-       初期化
-    ============================================================ */
-    renderDate();
-    setMood(currentMood);
+  /* ============================================================
+     ADD TASK
+  ============================================================ */
+  function addTask(e) {
+    e.preventDefault();
+    const input = document.getElementById('task-input');
+    const text = input.value.trim();
+    if (!text) return;
+    tasks.push({ id: nextId++, text, completed: false });
+    saveTasks();
     renderTasks();
+    input.value = '';
+    input.focus();
+  }
+
+  /* ============================================================
+     TOGGLE TASK
+  ============================================================ */
+  function toggleTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    task.completed = !task.completed;
+    saveTasks();
+    renderTasks();
+
+    if (task.completed) {
+      triggerCompleteFx();
+      const msgs = completionMessages[currentMood];
+      showToast(msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+  }
+
+  const completionMessages = {
+    energetic: ['最高！一個倒した！💥', 'ガンガンいこうぜ！🚀', 'パーフェクト！次！🔥', 'やったね！止まるな！⚡'],
+    chill:     ['えらい！ゆっくりでいいよ☕', 'ひとつできたら花丸🌿', '無理しないでね、お疲れ様💚', 'よくできました🍵'],
+    focus:     ['[DONE] +1 ⚡', 'Completed. Next task.', 'Task closed. 集中継続。', 'Good. Keep going.'],
+    cozy:      ['よかったね🌸 波紋広がる〜', 'ほんのり達成感🫧', 'じわっと嬉しい✨', '小さな一歩、大事💜'],
+  };
+
+  /* ============================================================
+     DELETE TASK
+  ============================================================ */
+  function deleteTask(id) {
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks();
+    renderTasks();
+  }
+
+  /* ============================================================
+     COMPLETION EFFECTS
+  ============================================================ */
+  function triggerCompleteFx() {
+    const fx = MOODS[currentMood].completeFx;
+    if (fx === 'confetti') launchConfetti();
+    else if (fx === 'steam') launchSteam();
+    else if (fx === 'glow') triggerGlow();
+    else if (fx === 'ripple') launchRipple();
+  }
+
+  /* --- Confetti --- */
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#f59e0b','#ef4444','#f97316','#fbbf24','#ffffff','#10b981'];
+    const pieces = Array.from({length: 90}, () => ({
+      x: Math.random() * canvas.width,
+      y: -10 - Math.random() * 60,
+      w: 7 + Math.random() * 8,
+      h: 4 + Math.random() * 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.15,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 3 + Math.random() * 3,
+      alpha: 1,
+    }));
+
+    let frame;
+    let elapsed = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      elapsed++;
+      let alive = false;
+      pieces.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.angle += p.spin;
+        if (elapsed > 50) p.alpha -= 0.015;
+        if (p.alpha > 0) {
+          alive = true;
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.angle);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          ctx.restore();
+        }
+      });
+      if (alive) frame = requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    if (frame) cancelAnimationFrame(frame);
+    draw();
+  }
+
+  /* --- Steam --- */
+  function launchSteam() {
+    const card = document.getElementById('main-card');
+    const rect = card.getBoundingClientRect();
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'steam-particle';
+        const x = rect.left + Math.random() * rect.width;
+        const y = rect.top + rect.height * 0.5 + Math.random() * 40;
+        el.style.left = x + 'px';
+        el.style.top = y + 'px';
+        el.style.setProperty('--sx', (Math.random() - 0.5) * 30 + 'px');
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+      }, i * 80);
+    }
+  }
+
+  /* --- Glow (focus) --- */
+  function triggerGlow() {
+    const card = document.getElementById('main-card');
+    card.classList.add('focus-glow');
+    setTimeout(() => card.classList.remove('focus-glow'), 700);
+  }
+
+  /* --- Ripple (cozy) --- */
+  function launchRipple() {
+    const overlay = document.getElementById('ripple-overlay');
+    const card = document.getElementById('main-card');
+    const rect = card.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const size = Math.max(rect.width, rect.height);
+
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const circle = document.createElement('div');
+        circle.className = 'ripple-circle';
+        circle.style.width = size + 'px';
+        circle.style.height = size + 'px';
+        circle.style.left = (cx - size/2) + 'px';
+        circle.style.top = (cy - size/2) + 'px';
+        circle.style.animationDuration = (1.0 + i * 0.25) + 's';
+        overlay.appendChild(circle);
+        setTimeout(() => circle.remove(), 1600);
+      }, i * 180);
+    }
+  }
+
+  /* ============================================================
+     TOAST
+  ============================================================ */
+  let toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  /* ============================================================
+     FOCUS TIMER (Pomodoro)
+  ============================================================ */
+  function updateTimerDisplay() {
+    const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+    const s = String(timerSeconds % 60).padStart(2, '0');
+    document.getElementById('timer-display').textContent = `${m}:${s}`;
+  }
+
+  function toggleTimer() {
+    const btn = document.getElementById('timer-start-btn');
+    if (timerRunning) {
+      clearInterval(timerInterval);
+      timerRunning = false;
+      btn.textContent = 'START';
+      btn.classList.remove('running');
+    } else {
+      timerRunning = true;
+      btn.textContent = 'PAUSE';
+      btn.classList.add('running');
+      timerInterval = setInterval(() => {
+        if (timerSeconds > 0) {
+          timerSeconds--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          btn.textContent = 'START';
+          btn.classList.remove('running');
+          showToast('⏱ 25分経過！お疲れ様でした。休憩しよう。');
+        }
+      }, 1000);
+    }
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerSeconds = 25 * 60;
+    updateTimerDisplay();
+    const btn = document.getElementById('timer-start-btn');
+    btn.textContent = 'START';
+    btn.classList.remove('running');
+  }
+
+  /* ============================================================
+     MOOD LOG RENDER
+  ============================================================ */
+  function renderMoodLog() {
+    const list = document.getElementById('mood-log-list');
+    list.innerHTML = '';
+    if (moodLog.length === 0) {
+      list.innerHTML = '<div style="font-size:12px;opacity:0.5;color:#fff;">まだ気分ログがありません</div>';
+      return;
+    }
+    moodLog.forEach(entry => {
+      const item = document.createElement('div');
+      item.className = 'mood-log-item';
+      item.innerHTML = `
+        <span style="opacity:0.55;font-size:11px;min-width:38px;">${entry.time}</span>
+        <span class="mood-log-badge">${entry.emoji} ${entry.name}</span>
+      `;
+      list.appendChild(item);
+    });
+  }
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  function init() {
+    // Set initial mood without logging
+    const moodData = MOODS[currentMood];
+    document.body.className = moodData.themeClass;
+    document.getElementById('today-msg').textContent = moodData.cheer;
+    renderTasks();
+    renderMoodLog();
+    updateTimerDisplay();
+  }
+
+  init();
