@@ -1,66 +1,100 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MoodDo - 今日の気分に寄り添うTodo</title>
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodDo 🍋 気分で変わるTodoアプリ</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-theme="relax">
+<body class="theme-energetic">
 
-  <div class="container">
-    <!-- 気分選択バー -->
-    <div class="mood-selector">
-      <button class="mood-btn" data-mood="energetic" title="Energetic">⚡<span>活発</span></button>
-      <button class="mood-btn active" data-mood="relax" title="Relax">🌿<span>のんびり</span></button>
-      <button class="mood-btn" data-mood="focus" title="Deep Focus">🌌<span>集中</span></button>
-      <button class="mood-btn" data-mood="cozy" title="Cozy Cafe">☕<span>カフェ</span></button>
-      <button class="mood-btn" data-mood="gentle" title="Gentle">🌸<span>癒やし</span></button>
-    </div>
+<canvas id="confetti-canvas"></canvas>
+<div class="ripple-overlay" id="ripple-overlay"></div>
+<div class="toast" id="toast"></div>
 
-    <!-- ヘッダー -->
-    <header>
-      <div class="date-badge" id="currentDate">2025.01.01 WED</div>
-      <h1 class="app-title" id="moodTitle">心穏やかにいこう🌿</h1>
-      <p class="mood-quote" id="moodQuote">「焦らず、深呼吸してマイペースに進めよう。」</p>
-    </header>
+<div class="app-wrapper">
 
-    <!-- プログレスバー -->
-    <div class="progress-wrap" id="progressWrap">
-      <div class="progress-label">
-        <span id="progressText">0 / 0 完了</span>
-        <span id="progressPercent">0%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-bar" id="progressBar" style="width:0%"></div>
-      </div>
-    </div>
-
-    <!-- 入力エリア -->
-    <form class="input-box" id="todoForm">
-      <input type="text" id="taskInput" placeholder="今日やりたいことを入れてね…" autocomplete="off">
-      <button type="submit" class="add-btn" id="addBtn">追加</button>
-    </form>
-
-    <!-- フィルター -->
-    <div class="filter-bar">
-      <button class="filter-btn active" data-filter="all">すべて</button>
-      <button class="filter-btn" data-filter="active">未完了</button>
-      <button class="filter-btn" data-filter="done">完了済み</button>
-    </div>
-
-    <!-- タスク一覧 -->
-    <div class="task-list" id="taskList"></div>
-
-    <!-- フッター -->
-    <div class="list-footer" id="listFooter" style="display:none;">
-      <button class="clear-btn" id="clearDoneBtn">完了済みを削除</button>
-    </div>
+  <!-- MOOD SELECTOR -->
+  <div class="mood-selector" id="mood-selector">
+    <button class="mood-btn active" data-mood="energetic" onclick="switchMood('energetic')">
+      <span>🔥</span><span>やる気MAX</span>
+    </button>
+    <button class="mood-btn" data-mood="chill" onclick="switchMood('chill')">
+      <span>🌿</span><span>まったり</span>
+    </button>
+    <button class="mood-btn" data-mood="focus" onclick="switchMood('focus')">
+      <span>🎯</span><span>集中モード</span>
+    </button>
+    <button class="mood-btn" data-mood="cozy" onclick="switchMood('cozy')">
+      <span>🌸</span><span>もやもや</span>
+    </button>
   </div>
 
-  <!-- 応援トースト -->
-  <div id="toast"></div>
+  <!-- MAIN CARD -->
+  <div class="card" id="main-card">
 
-    <script src="js/app.js"></script>
+    <!-- Today's Message -->
+    <div class="today-msg" id="today-msg"></div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-chip">
+        <span class="stat-num" id="stat-total">0</span>
+        <div class="stat-label">タスク合計</div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num" id="stat-done">0</span>
+        <div class="stat-label">完了</div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-num" id="stat-rate">0%</span>
+        <div class="stat-label">達成率</div>
+      </div>
+    </div>
+
+    <!-- FOCUS TIMER (only visible in focus mode) -->
+    <div class="focus-timer" id="focus-timer">
+      <div>
+        <div style="font-size:11px;color:#818cf8;font-family:monospace;margin-bottom:4px;opacity:0.7;">POMODORO TIMER</div>
+        <div class="timer-display" id="timer-display">25:00</div>
+      </div>
+      <div class="timer-btns">
+        <button class="timer-btn" id="timer-start-btn" onclick="toggleTimer()">START</button>
+        <button class="timer-btn" onclick="resetTimer()" style="opacity:0.6;">RESET</button>
+      </div>
+    </div>
+
+    <!-- ADD TASK FORM -->
+    <form class="add-task-form" onsubmit="addTask(event)">
+      <input
+        type="text"
+        class="task-input"
+        id="task-input"
+        placeholder="タスクを入力..."
+        autocomplete="off"
+        maxlength="80"
+      />
+      <button type="submit" class="add-btn" id="add-btn">追加</button>
+    </form>
+
+    <!-- TASK LIST -->
+    <ul class="task-list" id="task-list"></ul>
+
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <div class="empty-state-icon">✨</div>
+      <div>タスクを追加してみよう！</div>
+    </div>
+
+  </div><!-- /.card -->
+
+  <!-- MOOD LOG -->
+  <div class="mood-log-section" id="mood-log-section">
+    <div class="mood-log-title">📅 今日の気分ログ</div>
+    <div class="mood-log-list" id="mood-log-list"></div>
+  </div>
+
+</div><!-- /.app-wrapper -->
+
+  <script src="js/app.js"></script>
 </body>
 </html>
